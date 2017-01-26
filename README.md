@@ -11,7 +11,7 @@ ember install ember-pikaday-shim
 ## Usage
 
 ```js
-import _ from 'pikaday'
+import Pikaday from 'pikaday'
 ```
 
 To learn more about `pikaday` and how to use it visit the [pikaday](https://github.com/pikaday/pikaday) Github page.
