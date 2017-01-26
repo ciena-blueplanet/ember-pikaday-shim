@@ -14,7 +14,7 @@ ember install ember-pikaday-shim
 import Pikaday from 'pikaday'
 ```
 
-To learn more about `pikaday` and how to use it visit the [pikaday](https://github.com/pikaday/pikaday) Github page.
+To learn more about `pikaday` and how to use it visit the [pikaday](https://github.com/dbushell/Pikaday) Github page.
 
 [ci-img]: https://img.shields.io/travis/ciena-blueplanet/ember-pikaday-shim.svg "Travis CI Build Status"
 [ci-url]: https://travis-ci.org/ciena-blueplanet/ember-pikaday-shim
