@@ -1,6 +1,6 @@
 {
   "name": "ember-pikaday-shim",
-  "version": "1.1.0",
+  "version": "0.0.1",
   "description": "pikaday for Ember apps",
   "directories": {
     "doc": "doc",
