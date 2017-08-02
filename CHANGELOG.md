@@ -1,3 +1,7 @@
+# 0.1.2 (2017-08-02)
+* **Updated** to Ember CLI 2.12.3
+
+
 # 0.1.1 (2017-08-02)
 * **Added** CONTRIBUTING.md file
 * **Updated** missed items during Ember CLI 2.11.x upgrade
