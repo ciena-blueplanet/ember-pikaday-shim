@@ -1,76 +1,74 @@
+sudo: required
+dist: trusty
 language: node_js
-sudo: false
+
 node_js:
-- '5.0'
+- '6.11.0'
 - 'stable'
-branches:
-  except:
-  - /^v[0-9\.]+/
+
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
+    - google-chrome
     packages:
+    - google-chrome-stable
     - g++-4.8
+  firefox: "latest"
+
 cache:
   directories:
     - node_modules
 env:
   matrix:
-  - EMBER_TRY_SCENARIO=ember-1-12
-  - EMBER_TRY_SCENARIO=ember-1-13
-  - EMBER_TRY_SCENARIO=ember-2-0
-  - EMBER_TRY_SCENARIO=ember-2-1
-  - EMBER_TRY_SCENARIO=ember-2-2
-  - EMBER_TRY_SCENARIO=ember-2-3
-  - EMBER_TRY_SCENARIO=ember-2-4
-  - EMBER_TRY_SCENARIO=ember-2-5
-  - EMBER_TRY_SCENARIO=ember-2-6
-  - EMBER_TRY_SCENARIO=ember-2-7
-  - EMBER_TRY_SCENARIO=ember-2-8
-  - EMBER_TRY_SCENARIO=ember-2-9
-  - EMBER_TRY_SCENARIO=ember-2-10
-  - EMBER_TRY_SCENARIO=default
+  - EMBER_TRY_SCENARIO=ember-lts-2.4
+  - EMBER_TRY_SCENARIO=ember-lts-2.8
+  - EMBER_TRY_SCENARIO=ember-default
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
   global:
     - CXX=g++-4.8
-    - secure: fkWF7xBZCCVrFl8fcrE2P8ZXg/Tz55JITa/zXepgXTk/+HFC1nFMTKNt34MrKy0c+S4hbYayXmE01yu0WVgcAQJZfXyzfMJLjSrEtELXbFq6fCCSA1tEKLkY/2baoWqYHXhStVk+ZFmws77dlC4tTY0Gik2RYDlzYncE8rpb2o6c1V/Jxz7nx2Q+IpOF8PH/IcQuCRQo576AfzsU6/hBWa7FoFXf4ELxod1UzfUjo1dD+9NmmOFqMgYm8pwh0whv75x0xbjrBToyvzvw9Ce0JkdYN9Vymoa7tGg6sX0YQSqm/YJdnsM2TIv9CbScSP2etWLQeg6r+IKho5zYDRwh3uQuXe4HFRJVQcYbH+w42wjvfG+dH3NQizNasewIlzaq0PGxifIY3jOJ8Xx0lTECNAgcQk/ZPJo/Ma6o91oPLSkHo9fhXxX0590ypfsZIvaUw6AnzA3nDeRfHImD3UzOKlgvBqJfnQl0Y7luMO36BKKjmNPqIEyWnRom2WWznI0SFDbsn7+elh+xHqYukGj/lBErCVtl6DcG6TtrWzrcxzR5XQGl66tg7C1IrLwq8yPV98NKQDVV5T2eb9XGyzMKRAsVehxJh9zTR66KH+1Q/v4+m3RRTgr3/qJl0FeD2vduUjqYdodfUYQYsBMhuZuvbPET0EUaSssMVA2+fKM88vs=
+    - secure: OUR46/jCB30QEMK18QUex4ej5NzJFnYFvgATzfLSHN+8IHOvT8A8na0hdIgHwd0RVhECZ2YPwzM9SCZuAPs9uQvHaYVlH0Q1mwUxwTfslf1EY/GogruB2iguSJtXXXr8y2vhlHSKCsT248dEO/B1F8GoyzSQ9BAkSXIxuIJGcgbmCocLXZr1L4qShadNYrJM+EyGie18gOHq+cPh7SCr8yd0M8GFZwASRX+9l35epHz2rMgm2jo/Fn84YZ9IjqgMR4f4Stjd/bSr7n3tbM7Y7DBQuzXROc8RVnNHqOCu+hHnaWO5wcerM1WMpQuhDJOBI7V0gAS578v5Do6vi1Lw6PZhIxmZOUErwxg6i47/u04U+DHBQvl4TPiz8yJiumE7I+MVidpuKWHx7opE0Y7hbfBmiM8jN8b8PhaaTTnB2+YL/R8ubJouzZYVvndJb2WrNEWD2hFhIzxtzjjIPrMurbvH3pV2wxmnPkRDbw6CH7YfeYM3bRffsI3836daRTZTIumuSsMKIC8w5Mzy+03dxYVw8ebpALUNv58zrvhged+oUh5L392fVJA8V2/m/Ebv6pRmt/3txVzkuOnj4CRefGu1RA2m4fawOQXfsUuaWK8kbl1f9U4ojlbjxm+EjEdAu7p2ONYGNLBxY1LH/TCx37GaDPPHgdCc0Y0WpP8H5xs=
+
 matrix:
   fast_finish: true
   allow_failures:
   - env: EMBER_TRY_SCENARIO=ember-beta
   - env: EMBER_TRY_SCENARIO=ember-canary
+  - node_js: 'stable'
+
 before_install:
 - npm config set spin false
-- npm install -g coveralls pr-bumper
-- pr-bumper check
+- npm install -g coveralls pr-bumper@^2.0.0
+- $(npm root -g)/pr-bumper/.travis/maybe-check-scope.sh
+
 install:
-- npm install
-- bower install
+- $(npm root -g)/pr-bumper/.travis/maybe-install.sh
+
 before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
+
 script:
-- npm run lint
-- ember try:one $EMBER_TRY_SCENARIO --- ember test
+- $(npm root -g)/pr-bumper/.travis/maybe-test.sh
+- .travis/maybe-bump-version.sh
+
 after_success:
-- .travis/publish-coverage.sh
-before_deploy:
-- pr-bumper bump
+- .travis/maybe-publish-coverage.sh
+
 deploy:
   provider: npm
   email: npm.ciena@gmail.com
   skip_cleanup: true
   api_key:
-    secure: x8aczaAdvl6hm55XQyago+emi6dpKOTHTrq5DD2O/XLU37WLVrBfSGtNghcdEWIb+qwpPnesVfkuxGj0Juh/VLaWeeTrb8Zq3iidqWZ/jv+ptyKWUKmp++7LJRB3EV6Ww+4VVucp/FEuZXwByoU8jL4/GyGR/XONV4DefPSz6Ox11gIC7MT+bPhpvsZsLWm8W1Ig9vqbcRGAHmrBpXqurqNq642aHiVP4ddcekI/D0Os9xP+yymuvO0KJN+Lu/n/tyvdNTSfmn+x3iJLeJpqC+1cwNYkd6seWQh70cw/m0KPmK46QhCO6NDrxMa/jQE/XdN1LU0AkN0urINsg7gE3DmKR3yWTR+bSbqCDCXUOyTZ1wWW4n9YTCcsf+pddPokjKgMBbPCbOiwn1/2pXYgjnIgTILK/mPKKcxNXXpTuQof/V6nzbcfqVE21sAO7utisCtz1zDemhtLk6mwgtcaKzYEPEi7LGFeCLkx3YdbKPAzcmKux2vYlSPNz6I2SrBpJXImQ/0KoXUY4beVcCGBeDX/2fmJf1kgXhO0YpX3xuP5MqSeCtIYt5BrQuOBXr2RRThID8zq6bsBv3A+dxHvecFvzo9l7KCUPKN7BafavSCNQZ/pe3ErTgoGX4J7ehHaqWuu9C9ENiq0zluTSVFxB5SeEPHJl4hGBrjH7+Xwas8=
+    secure: nyT1TDYG48WJDkn1ltz/CfHUKa1wk/VozvKtnr2R+igo/fwkqLqKBLDhT/zXtfGLv6cVOSW8tomvG/dKe75TtrGHtjmtzC71xowr1y2dWbxgFfS7uqgqCZH61rhUpT8JVIURL2TK21sCwgEToaknzBKawqUZVbRj7oK74vNek1XrlHofne4krEUhhRZ+Vi63rxozfQDw+tqTLmlrqqqvG9jMYE8icOnFExw0aXDciRY+tYuu/Pa0oVORIGs1u1BgiFG9UcLObr4i80rYD45uH5Jws84varkigYTlza+dXP2j9L+A0LSALl/Mt4KDbS4zXhsw9CeMKTUaS0NX86yxpti2V/FFdNX26domj6GUQQfyE4CMv9XvGT+LDw3b2kHq+l0HiA4+1hCJ8sc423dzEf9rGZgG3vGFjuGpzmxZ6FCOcum9QP696firXc5K3JTQptdl5qvYo8bUZpeTlbfUoRzSHSuQ5XBUwhwiqkRRCqBZl8zh7EDMq/K6UTRcSAeMfW5WVSXeuPCyyK6LMSzVH7TjPdyWu8QBmyCWpy0ABXINez6oiDmIG3Z0XwjI22MVlfa2q4L/Spl1NJkekhqQhMMLX0yNMp82gQFcanc1zs4RMHnrD6LmMfz/B0X1H7MhVV2LjtO02Q8xB+D62YTPvO91SXwLpWz9vt1Yq8xZ3LQ=
   on:
-    branch: master
-    condition: "$EMBER_TRY_SCENARIO = 'default'"
-    node: 'stable'
-    tags: false
+    all_branches: true
+    condition: "$EMBER_TRY_SCENARIO = 'ember-default'"
+    node: '6.11.0'
+    tags: true
 notifications:
   slack:
-    secure: YUeAQQ8hp4IRKK5mlP8N7Iz2QTIkpCrfZHsnUm4+14IL+ZRU19vg30VwnieBieLZfr5lfh2uUclror8w6kmTb0IEDJYmbhRcWklwcyfPbbQPjucnlTlYM5Psr3i+Y6T3X0eqvwEfUKKAIMjqSJN30/75KR7N88bl7fTQFS7ZcrBKKrKYq5lND9l59XCd2oq7gN4bVQCd3vWS7x+Y667MAm2PKnPSZIEPNvrm9KmDQPivxfn3ixe1HlW9EKxmFmYjVEzGpMUb38xirH2VUw/mRVn5g/3GP5PgYw89/BRAz4mNqKa5ACvP/HVcSLwNgAiG1U2iL224MMHC/H8mMwy+3YROk68wxKoJP5EArRDTPdyvyaiZV7hWKAonqB7kaq1Jshk98rTPfhpQin5R0u+NnJ5qQzWQXfbGR7KpWQJZWl6qbwsFHq2ftOsCM88T0NbOOy0Btgs6ZQwINde441cDcdar56CUlbL1dObZD8v+D9oZXTfOrbrwHqT1Bsy3tWywbk2inUnGtbx1qmKPJVWFLKeAdmSXtOIQZZq7WcVatNob0AlJDYlyLgzx42rZKSJJX+tohqQ6obkPuoFn7DFAzUT0dhI17fu/0ZvZIAbhLpllIaeG5gRjPsTNvdOiJTUYg72NwqSKwDpH+Yz/be/b0r6MblA8uAgWCpd4/4igASU=
+    secure: lGgHOwvUQGeHO/foQveV9Aogas/ztje+grczkb6gU1VWQl0WYV/8I7+3Qu811jjkLWsvDkDzvzal90PcDD1oLF4ZI2Wz4MD5nyQHL5PCbQulNVCz10Lx/Rh5IuLFhbg+8B9oS32Nc3URkB/YYrcl27peFX0KmDulYuo7SDodo3qdtbzLIj8+MwqT8mgKRXkJCSX+qB5y75Mlt6K9O38mzYvR5DFZ42GkQJOfUvLG1rTXJid+9YGoB7finpXhUmN6srSNdeOlPgn7iZZjJKZA9p4U/JzksZqJwUmyTUDvq/Qt0p0KJAiBonl029B4k1WBM8w/BxLHJ2iLa2Dv8KnKJv2p0kUDMitUo+6iMGIbsswJeJcJ99wSn9quqanSnpU9nAwTmHVatR+0cfOTju/i95z4Mk24TCxfcLNjXTJMg71HLtU0RfICf7kOT/uaDOkVbpTIWwkmz64L2c6l/dvEzuNlkv5qfer57oe7+KPj0yin6N9GP4duOJBKqeCPqEjpjP0onjAnJPci46r9hwJaaDsbcA60ps49VOYE8CVGWk+Tn3zcz6YpjJ0YkPcyM3pSO6IyF3dnmXnz++AHJHCwK0XMUHCBCDnqOLwn3Pje0HqGxJXvpgpRwyD4BVwR4oPPH++hwv+bRzLkAeMiNWSEHofNV4Z/NlYIXC0GzdtA0ng=
