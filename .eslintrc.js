@@ -8,7 +8,7 @@ module.exports = {
     'ocd/sort-import-declarations': [
       2,
       {
-        'localPrefixes': [
+        localPrefixes: [
           '../',
           './',
           'dummy/',
