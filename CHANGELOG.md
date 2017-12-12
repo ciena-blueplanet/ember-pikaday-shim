@@ -1,3 +1,7 @@
+# 0.1.4 (2017-12-12)
+* **Updated** version of `pikaday` to pinned `1.6.1`
+* **Added** bower since it is no longer included by Ember CLI
+
 # 0.1.3 (2017-11-10)
 * Delete blueprint
 * Remove `ember-cli-moment-shim` from devDependencies in _package.json_
