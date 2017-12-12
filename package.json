@@ -29,6 +29,7 @@
   "author": "Matthew Dahl (https://github.com/sandersky)",
   "license": "MIT",
   "devDependencies": {
+    "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.5",
     "ember-cli": "2.12.3",
     "ember-cli-chai": "^0.3.2",
@@ -61,7 +62,7 @@
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-moment-shim": "^3.0.1",
-    "pikaday": "^1.5.1"
+    "pikaday": "1.6.1"
   },
   "ember-addon": {
     "after": [
