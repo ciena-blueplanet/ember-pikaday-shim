@@ -4,7 +4,7 @@ import {beforeEach, describe, it} from 'mocha'
 import Pikaday from 'pikaday'
 
 describe('pikaday', function () {
-  it('exports Pikaday as default', function () {
+  it('should export Pikaday as default', function () {
     expect(typeof Pikaday).to.equal('function')
   })
 
@@ -15,7 +15,7 @@ describe('pikaday', function () {
       picker = new Pikaday()
     })
 
-    it('picker has HTMLElement on property "el"', function () {
+    it('should have HTMLElement on property "el"', function () {
       expect(picker.el).to.be.instanceof(window.HTMLElement)
     })
   })
