@@ -3,7 +3,7 @@ dist: trusty
 language: node_js
 
 node_js:
-- '6.11.0'
+- '8.1.2'
 - 'stable'
 
 addons:
@@ -40,7 +40,7 @@ matrix:
 
 before_install:
 - npm config set spin false
-- npm install -g coveralls pr-bumper@^2.0.0
+- npm install -g coveralls pr-bumper@^3.7.0 ciena-devops@^1.0.0
 - $(npm root -g)/pr-bumper/.travis/maybe-check-scope.sh
 
 install:
@@ -67,8 +67,12 @@ deploy:
   on:
     all_branches: true
     condition: "$EMBER_TRY_SCENARIO = 'ember-default'"
-    node: '6.11.0'
+    node: '8.1.2'
     tags: true
+
+after_deploy:
+- $(npm root -g)/ciena-devops/scripts/slack/incoming-webhooks/send-message.sh
+
 notifications:
   slack:
     secure: lGgHOwvUQGeHO/foQveV9Aogas/ztje+grczkb6gU1VWQl0WYV/8I7+3Qu811jjkLWsvDkDzvzal90PcDD1oLF4ZI2Wz4MD5nyQHL5PCbQulNVCz10Lx/Rh5IuLFhbg+8B9oS32Nc3URkB/YYrcl27peFX0KmDulYuo7SDodo3qdtbzLIj8+MwqT8mgKRXkJCSX+qB5y75Mlt6K9O38mzYvR5DFZ42GkQJOfUvLG1rTXJid+9YGoB7finpXhUmN6srSNdeOlPgn7iZZjJKZA9p4U/JzksZqJwUmyTUDvq/Qt0p0KJAiBonl029B4k1WBM8w/BxLHJ2iLa2Dv8KnKJv2p0kUDMitUo+6iMGIbsswJeJcJ99wSn9quqanSnpU9nAwTmHVatR+0cfOTju/i95z4Mk24TCxfcLNjXTJMg71HLtU0RfICf7kOT/uaDOkVbpTIWwkmz64L2c6l/dvEzuNlkv5qfer57oe7+KPj0yin6N9GP4duOJBKqeCPqEjpjP0onjAnJPci46r9hwJaaDsbcA60ps49VOYE8CVGWk+Tn3zcz6YpjJ0YkPcyM3pSO6IyF3dnmXnz++AHJHCwK0XMUHCBCDnqOLwn3Pje0HqGxJXvpgpRwyD4BVwR4oPPH++hwv+bRzLkAeMiNWSEHofNV4Z/NlYIXC0GzdtA0ng=
